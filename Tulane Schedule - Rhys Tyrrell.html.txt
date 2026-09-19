@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Service · Class Schedule — Tulane University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,500&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tulane-green:#006747;
+    --tulane-green-dark:#00432D;
+    --tulane-green-tint:#E7F0EC;
+    --tulane-blue:#71C5E8;
+    --avenue-blue:#00558C;
+    --storm:#00778B;
+    --medallion:#B8860B;
+    --olive:#5C7A1E;
+    --cream:#F7F7F3;
+    --ink:#1C2321;
+    --ink-soft:#4B554F;
+    --line:#DCE3DD;
+    --white:#FFFFFF;
+    --shadow: 0 1px 2px rgba(15,26,20,.06), 0 6px 20px rgba(15,26,20,.06);
+  }
+  body.dark{
+    --cream:#121712;
+    --white:#1A211C;
+    --ink:#ECEFEA;
+    --ink-soft:#9FAAA2;
+    --line:#2B342E;
+    --tulane-green-tint:#17281F;
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 6px 20px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Public Sans', -apple-system, Segoe UI, sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    -webkit-font-smoothing:antialiased;
+    transition:background .15s ease, color .15s ease;
+  }
+  a{color:inherit;}
+
+  .utility-bar{ background:var(--tulane-green-dark); color:rgba(255,255,255,.85); font-size:12.5px; }
+  .utility-bar .inner{ max-width:1180px;margin:0 auto;padding:6px 24px; display:flex;justify-content:flex-end;align-items:center;gap:18px; }
+  .utility-bar a{text-decoration:none;opacity:.9;}
+  .utility-bar a:hover{opacity:1;text-decoration:underline;}
+  .themebtn{ background:none;border:none;color:rgba(255,255,255,.85);font:600 12.5px 'Public Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;padding:0; }
+  .themebtn:hover{opacity:1;text-decoration:underline;}
+
+  .brand-header{ background:var(--tulane-green); color:var(--white); }
+  .brand-header .inner{ max-width:1180px;margin:0 auto;padding:16px 24px 18px; display:flex;align-items:center;justify-content:space-between; }
+  .wordmark{ display:flex;align-items:center;gap:12px; }
+  .wordmark .shield{ width:38px;height:38px;border:2px solid var(--white);border-radius:3px; display:flex;align-items:center;justify-content:center; font-family:'Source Serif 4',serif;font-weight:700;font-size:16px;letter-spacing:.5px; flex-shrink:0; }
+  .wordmark .name{ font-family:'Source Serif 4',serif; font-size:21px;font-weight:600;letter-spacing:.2px; line-height:1.1; }
+  .wordmark .name small{ display:block;font-family:'Public Sans',sans-serif;font-weight:500;font-size:11.5px; letter-spacing:1.2px;color:rgba(255,255,255,.75);margin-top:3px; }
+  .portal-tag{ font-family:'Source Serif 4',serif;font-style:italic;font-size:15px; color:rgba(255,255,255,.85);border-left:1px solid rgba(255,255,255,.35); padding-left:16px; }
+
+  .shell{max-width:1180px;margin:0 auto;padding:28px 24px 80px;}
+
+  .student-card{
+    background:var(--white); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow);
+    padding:22px 26px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; justify-content:space-between;
+  }
+  .student-identity{display:flex;align-items:center;gap:16px;}
+  .avatar{
+    width:56px;height:56px;border-radius:50%; background:var(--tulane-green);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Source Serif 4',serif;font-weight:600;font-size:19px; flex-shrink:0;
+  }
+  .student-identity h1{ margin:0 0 3px;font-family:'Source Serif 4',serif;font-size:20px;font-weight:600; }
+  .student-meta{ font-size:13px;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:4px 10px; }
+  .student-meta span:not(:last-child)::after{content:"·";margin-left:10px;color:var(--line);}
+  .term-control{ display:flex;align-items:center;gap:10px; }
+  .term-control label{font-size:12px;color:var(--ink-soft);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+  .term-select{
+    appearance:none;
+    background:var(--white) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6"><path d="M0 0l5 6 5-6z" fill="%234B554F"/></svg>') no-repeat right 12px center;
+    border:1px solid var(--line);border-radius:7px;padding:9px 34px 9px 12px;
+    font:600 13.5px 'Public Sans',sans-serif;color:var(--ink);cursor:pointer;
+  }
+
+  .stat-strip{ display:grid;grid-template-columns:repeat(4,1fr); gap:14px;margin-top:16px; }
+  .stat{ background:var(--white);border:1px solid var(--line);border-radius:10px; padding:14px 18px; }
+  .stat .num{font-family:'Source Serif 4',serif;font-size:26px;font-weight:600;color:var(--tulane-green);}
+  .stat .label{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+
+  .next-banner{
+    margin-top:16px;background:var(--tulane-green-tint);border:1px solid var(--tulane-green);
+    border-radius:10px;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;font-size:13.5px;
+  }
+  .next-banner .nb-left{display:flex;align-items:center;gap:10px;}
+  .next-banner .dot{width:8px;height:8px;border-radius:50%;background:var(--tulane-green);flex-shrink:0;}
+  .next-banner b{font-weight:700;}
+  .next-banner .countdown{ font-family:'Source Serif 4',serif;font-weight:600;color:var(--tulane-green-dark);}
+
+  .tabbar{ display:flex;gap:4px;margin:28px 0 16px;border-bottom:1px solid var(--line); }
+  .tabbtn{
+    appearance:none;border:none;background:none;cursor:pointer;
+    font:600 14px 'Public Sans',sans-serif;color:var(--ink-soft);
+    padding:10px 4px;margin-right:22px;border-bottom:2.5px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tabbtn:hover{color:var(--ink);}
+  .tabbtn.active{color:var(--tulane-green-dark);border-bottom-color:var(--tulane-green);}
+  .tabbtn:focus-visible, button:focus-visible, .term-select:focus-visible, .daychip:focus-visible, .searchbox input:focus-visible{
+    outline:2.5px solid var(--avenue-blue);outline-offset:2px;
+  }
+
+  .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .toolbar-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .daychips{display:flex;gap:6px;flex-wrap:wrap;}
+  .daychip{
+    border:1px solid var(--line);background:var(--white);border-radius:999px;
+    padding:6px 13px;font:600 12.5px 'Public Sans',sans-serif;color:var(--ink-soft);cursor:pointer;
+  }
+  .daychip[aria-pressed="true"]{background:var(--tulane-green-tint);border-color:var(--tulane-green);color:var(--tulane-green-dark);}
+  .searchbox{ display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--white); border-radius:7px;padding:7px 12px; }
+  .searchbox svg{flex-shrink:0;opacity:.55;}
+  .searchbox input{ border:none;outline:none;font:500 13px 'Public Sans',sans-serif;background:none;color:var(--ink);width:150px; }
+  .toolbar-right{display:flex;align-items:center;gap:8px;}
+  .printbtn{
+    display:flex;align-items:center;gap:6px;
+    border:1px solid var(--line);background:var(--white);border-radius:7px;
+    padding:8px 13px;font:600 12.5px 'Public Sans',sans-serif;color:var(--ink-soft);cursor:pointer;
+  }
+  .printbtn:hover{border-color:var(--tulane-green);color:var(--tulane-green-dark);}
+
+  .week-wrap{ background:var(--white);border:1px solid var(--line);border-radius:10px; box-shadow:var(--shadow);overflow:hidden; }
+  #weekGrid{display:grid;}
+  .g-headcell{
+    background:var(--white);border-bottom:1px solid var(--line);border-left:1px solid var(--line);
+    padding:10px 6px;text-align:center;font:700 12px 'Public Sans',sans-serif;
+    letter-spacing:.3px;color:var(--ink-soft);
+  }
+  .g-headcell.today{color:var(--tulane-green-dark);}
+  .g-headcell .d{display:block;font-family:'Source Serif 4',serif;font-size:15px;color:var(--ink);margin-top:1px;}
+  .g-corner{border-bottom:1px solid var(--line);}
+  .g-time{ font-size:11px;color:var(--ink-soft);text-align:right;padding:0 10px 0 0; border-top:1px solid var(--line);position:relative;top:-6px; }
+  .g-cell{border-top:1px solid var(--line);border-left:1px solid var(--line);}
+  .course-block{
+    border-radius:7px;padding:7px 9px;margin:2px 3px;cursor:pointer;
+    color:var(--white);font-size:12px;line-height:1.35;overflow:hidden;
+    display:flex;flex-direction:column;gap:1px;text-align:left;border:none;
+    font-family:'Public Sans',sans-serif;
+    transition:filter .12s ease, transform .12s ease, opacity .15s ease;
+  }
+  .course-block:hover{filter:brightness(1.07);transform:translateY(-1px);}
+  .course-block .code{font-weight:700;font-size:12.5px;}
+  .course-block .rm{opacity:.9;font-size:11px;}
+
+  #listView, #dayAgenda{display:none;flex-direction:column;gap:10px;}
+  .course-card{
+    background:var(--white);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--shadow);padding:14px 18px;
+    display:flex;align-items:center;gap:14px;text-align:left;
+    width:100%;font-family:'Public Sans',sans-serif;transition:opacity .15s ease;
+  }
+  .course-card:hover{border-color:var(--tulane-green);}
+  .cc-check{width:19px;height:19px;flex-shrink:0;accent-color:var(--tulane-green);cursor:pointer;}
+  .cc-clickable{flex:1;display:flex;align-items:center;gap:14px;background:none;border:none;cursor:pointer;text-align:left;padding:0;font-family:inherit;color:inherit;min-width:0;}
+  .swatch{width:8px;align-self:stretch;border-radius:4px;flex-shrink:0;}
+  .cc-main{flex:1;min-width:0;}
+  .cc-main .title{font-family:'Source Serif 4',serif;font-weight:600;font-size:15.5px;margin-bottom:3px;}
+  .cc-main .title.attended{text-decoration:line-through;color:var(--ink-soft);}
+  .cc-main .sub{font-size:12.5px;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:3px 8px;}
+  .cc-main .sub span:not(:last-child)::after{content:"·";margin-left:8px;color:var(--line);}
+  .cc-credits{ font-family:'Source Serif 4',serif;font-weight:600;font-size:13px;color:var(--ink-soft); background:var(--cream);border-radius:20px;padding:5px 12px;flex-shrink:0; }
+  .agenda-empty{ text-align:center;padding:34px 20px;color:var(--ink-soft);font-size:14px; background:var(--white);border:1px solid var(--line);border-radius:10px; }
+
+  .overlay{ position:fixed;inset:0;background:rgba(15,26,20,.45); display:none;align-items:center;justify-content:center;padding:20px;z-index:50; }
+  .overlay.open{display:flex;}
+  .modal{ background:var(--white);border-radius:12px;max-width:460px;width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden; }
+  .modal-head{padding:20px 24px;color:#fff;position:relative;}
+  .modal-head .mcode{font-size:12.5px;font-weight:700;letter-spacing:.5px;opacity:.9;}
+  .modal-head h2{margin:4px 0 0;font-family:'Source Serif 4',serif;font-size:20px;font-weight:600;}
+  .modal-close{ position:absolute;top:14px;right:14px;background:rgba(255,255,255,.18);border:none; color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;line-height:1; }
+  .modal-close:hover{background:rgba(255,255,255,.3);}
+  .modal-body{padding:20px 24px 24px;}
+  .modal-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+  .modal-row:last-of-type{border-bottom:none;}
+  .modal-row .k{color:var(--ink-soft);}
+  .modal-row .v{font-weight:600;text-align:right;}
+  .modal-desc{margin-top:14px;font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+  .modal-actions{display:flex;gap:8px;margin-top:18px;}
+  .btn{ flex:1;border:none;border-radius:7px;padding:10px 14px;font:600 13px 'Public Sans',sans-serif;cursor:pointer; }
+  .btn.primary{background:var(--tulane-green);color:#fff;}
+  .btn.primary:hover{background:var(--tulane-green-dark);}
+  .btn.ghost{background:var(--cream);color:var(--ink);}
+  .btn.ghost:hover{background:var(--line);}
+  .btn.ghost.on{background:var(--tulane-green-tint);color:var(--tulane-green-dark);}
+
+  footer{ max-width:1180px;margin:40px auto 0;padding:20px 24px; border-top:1px solid var(--line);color:var(--ink-soft);font-size:12px; display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px; }
+  .mock-badge{ position:fixed;bottom:14px;right:14px;background:var(--ink);color:var(--cream); font:600 11px 'Public Sans',sans-serif;padding:6px 11px;border-radius:20px;opacity:.72; letter-spacing:.3px;z-index:40; }
+
+  @media (max-width:720px){
+    .stat-strip{grid-template-columns:repeat(2,1fr);}
+    .portal-tag{display:none;}
+    #weekGrid{display:none !important;}
+    .week-note{display:block !important;}
+    .searchbox input{width:110px;}
+  }
+  .week-note{display:none;font-size:13px;color:var(--ink-soft);padding:18px;text-align:center;}
+</style>
+</head>
+<body>
+
+  <div class="utility-bar"><div class="inner">
+    <a href="#">Gibson Online</a><a href="#">Canvas</a><a href="#">Directory</a>
+    <button class="themebtn" id="themeToggle">🌙 Dark mode</button>
+    <a href="#">Sign Out</a>
+  </div></div>
+
+  <header class="brand-header"><div class="inner">
+    <div class="wordmark">
+      <div class="shield">TU</div>
+      <div class="name">Tulane University<small>NEW ORLEANS, LOUISIANA</small></div>
+    </div>
+    <div class="portal-tag">Student Self-Service</div>
+  </div></header>
+
+  <div class="shell">
+
+    <section class="student-card">
+      <div class="student-identity">
+        <div class="avatar" id="avatarInitials">RT</div>
+        <div>
+          <h1 id="studentName">Rhys Tyrrell</h1>
+          <div class="student-meta">
+            <span>Junior · Class of 2028</span>
+            <span>A. B. Freeman School of Business</span>
+            <span>B.S. Management, Hospitality Management concentration</span>
+          </div>
+        </div>
+      </div>
+      <div class="term-control">
+        <label for="termSelect">Term</label>
+        <select class="term-select" id="termSelect">
+          <option>Fall 2026</option>
+          <option>Spring 2027</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="stat-strip">
+      <div class="stat"><div class="num">6</div><div class="label">Enrolled courses</div></div>
+      <div class="stat"><div class="num">18</div><div class="label">Credit hours</div></div>
+      <div class="stat"><div class="num">3.61</div><div class="label">Cumulative GPA</div></div>
+      <div class="stat"><div class="num">Aug 17</div><div class="label">Classes began</div></div>
+    </div>
+
+    <div class="next-banner" id="nextBanner">
+      <div class="nb-left"><span class="dot"></span><span id="nextBannerText">Loading schedule…</span></div>
+      <div class="countdown" id="nextBannerCountdown"></div>
+    </div>
+
+    <div class="tabbar" role="tablist">
+      <button class="tabbtn active" id="tabWeek" role="tab" aria-selected="true">Week View</button>
+      <button class="tabbtn" id="tabList" role="tab" aria-selected="false">List View</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="daychips" id="dayChips"></div>
+      </div>
+      <div class="toolbar-right">
+        <div class="searchbox">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="text" id="searchInput" placeholder="Search your courses">
+        </div>
+        <button class="printbtn" id="printBtn">⎙ Print</button>
+      </div>
+    </div>
+
+    <div class="week-wrap" id="weekWrap">
+      <div id="weekGrid"></div>
+      <p class="week-note">Rotate your device or switch to List View to browse your schedule on a small screen.</p>
+    </div>
+
+    <div id="dayAgenda"></div>
+    <div id="listView"></div>
+
+  </div>
+
+  <footer>
+    <span>© 2026 Tulane University · New Orleans, LA 70118</span>
+    <span>This is a mock student-portal layout for practice, not an official Tulane site.</span>
+  </footer>
+
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head" id="modalHead">
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+        <div class="mcode" id="modalCode">FINE 3010</div>
+        <h2 id="modalTitle">Corporate Finance</h2>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="mock-badge">Mock site · not affiliated with Tulane</div>
+
+<script>
+const DAYS = ['Mon','Tue','Wed','Thu','Fri'];
+const DAY_DATES = {Mon:'8/17', Tue:'8/18', Wed:'8/19', Thu:'8/20', Fri:'8/21'};
+
+const courses = [
+  { code:'FINE 3010', title:'Corporate Finance', color:'#006747',
+    days:['Mon','Wed','Fri'], start:'9:00 AM', end:'9:50 AM', startMin:9*60, durMin:50,
+    room:'Goldring/Woldenberg Hall, Rm 128', instructor:'Prof. Melissa Reyes',
+    credits:3, seats:'34 / 40',
+    desc:'Principles of corporate financial management: time value of money, valuation, capital budgeting, and cost of capital, with cases drawn from hospitality and consumer sectors.' },
+  { code:'ISDS 3130', title:'Business Analytics', color:'#00558C',
+    days:['Tue','Thu'], start:'9:30 AM', end:'10:45 AM', startMin:9.5*60, durMin:75,
+    room:'Goldring/Woldenberg Hall, Rm 108', instructor:'Prof. Wei Zhang',
+    credits:3, seats:'29 / 35',
+    desc:'Data-driven decision making using spreadsheet and statistical tools: regression, forecasting, and dashboarding for operations and revenue-management contexts.' },
+  { code:'MGST 3910', title:'Organizational Behavior', color:'#00778B',
+    days:['Mon','Wed','Fri'], start:'11:00 AM', end:'11:50 AM', startMin:11*60, durMin:50,
+    room:'Freeman Hall, Rm 214', instructor:'Prof. Angela Ruiz',
+    credits:3, seats:'38 / 40',
+    desc:'How individuals, teams, and structures shape performance. Covers motivation, leadership, culture, and change management with service-industry case studies.' },
+  { code:'HTMT 3300', title:'Hospitality & Tourism Management', color:'#B8860B',
+    days:['Tue','Thu'], start:'12:30 PM', end:'1:45 PM', startMin:12.5*60, durMin:75,
+    room:'Freeman Hall, Rm 150', instructor:'Prof. James Patterson',
+    credits:3, seats:'22 / 28',
+    desc:'Core concentration course covering hotel and hospitality operations, guest-experience design, revenue management, and the New Orleans tourism economy.' },
+  { code:'LEGL 3010', title:'Legal Environment of Business', color:'#5C7A1E',
+    days:['Mon','Wed','Fri'], start:'1:00 PM', end:'1:50 PM', startMin:13*60, durMin:50,
+    room:'Freeman Hall, Rm 219', instructor:'Prof. Karen Boudreaux',
+    credits:3, seats:'40 / 40',
+    desc:'Contracts, torts, agency, and regulatory frameworks affecting business decisions, with attention to hospitality licensing and liability issues.' },
+  { code:'MKTG 3020', title:'Consumer Behavior', color:'#71C5E8', dark:true,
+    days:['Tue','Thu'], start:'2:00 PM', end:'3:15 PM', startMin:14*60, durMin:75,
+    room:'Freeman Hall, Rm 306', instructor:'Prof. David Chen',
+    credits:3, seats:'31 / 35',
+    desc:'Psychological and social drivers of consumer choice, applied to marketing strategy for brands, restaurants, and experience-driven businesses.' }
+];
+
+const attended = new Set(); // in-memory only, resets on reload
+let currentDayFilter = null; // null = full week
+let searchTerm = '';
+
+const GRID_START = 8*60;
+const SLOT = 30;
+const SLOTS = 16;
+function timeRow(min){ return Math.round((min-GRID_START)/SLOT)+2; }
+
+function matchesSearch(course){
+  if(!searchTerm) return true;
+  const s = searchTerm.toLowerCase();
+  return course.code.toLowerCase().includes(s) || course.title.toLowerCase().includes(s) || course.instructor.toLowerCase().includes(s);
+}
+
+function buildGrid(){
+  const grid = document.getElementById('weekGrid');
+  grid.style.gridTemplateColumns = '64px repeat(5,1fr)';
+  grid.style.gridTemplateRows = `40px repeat(${SLOTS},44px)`;
+  grid.innerHTML='';
+
+  const corner=document.createElement('div');
+  corner.className='g-headcell g-corner';
+  corner.style.gridColumn='1'; corner.style.gridRow='1';
+  grid.appendChild(corner);
+
+  const todayShort = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date().getDay()];
+  DAYS.forEach((d,i)=>{
+    const c=document.createElement('div');
+    c.className='g-headcell'+(d===todayShort?' today':'');
+    c.style.gridColumn=(i+2); c.style.gridRow='1';
+    c.innerHTML = d+'<span class="d">'+ DAY_DATES[d] + '</span>';
+    grid.appendChild(c);
+  });
+
+  for(let s=0;s<SLOTS;s++){
+    const mins = GRID_START + s*SLOT;
+    const h24 = Math.floor(mins/60), m = mins%60;
+    const label = ((h24%12)||12) + (m===0?':00':':30') + (h24<12?' AM':' PM');
+    const t=document.createElement('div');
+    t.className='g-time';
+    t.style.gridColumn='1'; t.style.gridRow=(s+2);
+    if(m===0) t.textContent = label;
+    grid.appendChild(t);
+    for(let d=0;d<5;d++){
+      const cell=document.createElement('div');
+      cell.className='g-cell';
+      cell.style.gridColumn=(d+2); cell.style.gridRow=(s+2);
+      grid.appendChild(cell);
+    }
+  }
+
+  courses.forEach(course=>{
+    course.days.forEach(day=>{
+      const col = DAYS.indexOf(day)+2;
+      const rowStart = timeRow(course.startMin);
+      const rowEnd = timeRow(course.startMin+course.durMin);
+      const block=document.createElement('button');
+      block.className='course-block';
+      block.style.gridColumn=col;
+      block.style.gridRow = rowStart+' / '+rowEnd;
+      block.style.background = course.color;
+      if(course.dark) block.style.color = '#0B2430';
+      block.innerHTML = '<span class="code">'+course.code+'</span><span class="rm">'+course.room.split(',')[0]+'</span>';
+      if(!matchesSearch(course)){ block.style.opacity='.15'; block.style.pointerEvents='none'; }
+      block.addEventListener('click',()=>openModal(course));
+      grid.appendChild(block);
+    });
+  });
+}
+
+function courseCardHTML(course){
+  const isDone = attended.has(course.code);
+  return `
+    <input type="checkbox" class="cc-check" data-code="${course.code}" ${isDone?'checked':''} aria-label="Mark ${course.code} attended today">
+    <button class="cc-clickable" data-open="${course.code}">
+      <div class="swatch" style="background:${course.color}"></div>
+      <div class="cc-main">
+        <div class="title ${isDone?'attended':''}">${course.code} — ${course.title}</div>
+        <div class="sub">
+          <span>${course.days.join('/')}</span>
+          <span>${course.start} – ${course.end}</span>
+          <span>${course.room}</span>
+          <span>${course.instructor}</span>
+        </div>
+      </div>
+      <div class="cc-credits">${course.credits} cr</div>
+    </button>`;
+}
+
+function wireCourseCard(card, course){
+  card.querySelector('.cc-check').addEventListener('change', e=>{
+    if(e.target.checked) attended.add(course.code); else attended.delete(course.code);
+    card.querySelector('.title').classList.toggle('attended', e.target.checked);
+  });
+  card.querySelector('.cc-clickable').addEventListener('click', ()=>openModal(course));
+}
+
+function buildList(){
+  const wrap = document.getElementById('listView');
+  wrap.innerHTML='';
+  const visible = courses.filter(matchesSearch);
+  if(visible.length===0){
+    wrap.innerHTML = '<div class="agenda-empty">No courses match your search.</div>';
+    return;
+  }
+  visible.forEach(course=>{
+    const card=document.createElement('div');
+    card.className='course-card';
+    card.innerHTML = courseCardHTML(course);
+    wrap.appendChild(card);
+    wireCourseCard(card, course);
+  });
+}
+
+function buildDayAgenda(day){
+  const wrap = document.getElementById('dayAgenda');
+  wrap.innerHTML='';
+  const dayCourses = courses.filter(c=>c.days.includes(day) && matchesSearch(c)).sort((a,b)=>a.startMin-b.startMin);
+  if(dayCourses.length===0){
+    wrap.innerHTML = '<div class="agenda-empty">No classes on '+day+'ay' + (searchTerm?' matching your search.':'.') + '</div>';
+    return;
+  }
+  dayCourses.forEach(course=>{
+    const card=document.createElement('div');
+    card.className='course-card';
+    card.innerHTML = courseCardHTML(course);
+    wrap.appendChild(card);
+    wireCourseCard(card, course);
+  });
+}
+
+function refreshCurrentView(){
+  if(currentDayFilter){ buildDayAgenda(currentDayFilter); }
+  else { buildGrid(); }
+  if(document.getElementById('listView').style.display==='flex') buildList();
+}
+
+function buildDayChips(){
+  const wrap=document.getElementById('dayChips');
+  wrap.innerHTML='';
+  const all=document.createElement('button');
+  all.className='daychip'; all.setAttribute('aria-pressed','true'); all.textContent='Full week';
+  all.addEventListener('click',()=>{
+    currentDayFilter=null;
+    [...wrap.children].forEach(c=>c.setAttribute('aria-pressed','false'));
+    all.setAttribute('aria-pressed','true');
+    document.getElementById('weekWrap').style.display='block';
+    document.getElementById('dayAgenda').style.display='none';
+    buildGrid();
+  });
+  wrap.appendChild(all);
+  DAYS.forEach(d=>{
+    const chip=document.createElement('button');
+    chip.className='daychip'; chip.setAttribute('aria-pressed','false'); chip.textContent=d;
+    chip.addEventListener('click',()=>{
+      currentDayFilter=d;
+      [...wrap.children].forEach(c=>c.setAttribute('aria-pressed','false'));
+      chip.setAttribute('aria-pressed','true');
+      document.getElementById('weekWrap').style.display='none';
+      document.getElementById('dayAgenda').style.display='flex';
+      buildDayAgenda(d);
+    });
+    wrap.appendChild(chip);
+  });
+}
+
+function openModal(course){
+  document.getElementById('modalCode').textContent = course.code;
+  document.getElementById('modalTitle').textContent = course.title;
+  document.getElementById('modalHead').style.background = course.color;
+  document.getElementById('modalHead').style.color = course.dark ? '#0B2430' : '#fff';
+  const isDone = attended.has(course.code);
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-row"><span class="k">Meeting pattern</span><span class="v">${course.days.join('/')} · ${course.start}–${course.end}</span></div>
+    <div class="modal-row"><span class="k">Location</span><span class="v">${course.room}</span></div>
+    <div class="modal-row"><span class="k">Instructor</span><span class="v">${course.instructor}</span></div>
+    <div class="modal-row"><span class="k">Credit hours</span><span class="v">${course.credits}</span></div>
+    <div class="modal-row"><span class="k">Seats filled</span><span class="v">${course.seats}</span></div>
+    <p class="modal-desc">${course.desc}</p>
+    <div class="modal-actions">
+      <button class="btn ghost ${isDone?'on':''}" id="modalAttend">${isDone?'✓ Attended today':'Mark attended today'}</button>
+      <button class="btn primary" id="modalDone">Done</button>
+    </div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('modalDone').addEventListener('click',closeModal);
+  document.getElementById('modalAttend').addEventListener('click',(e)=>{
+    if(attended.has(course.code)){ attended.delete(course.code); e.target.textContent='Mark attended today'; e.target.classList.remove('on'); }
+    else { attended.add(course.code); e.target.textContent='✓ Attended today'; e.target.classList.add('on'); }
+    refreshCurrentView();
+  });
+  document.getElementById('modalClose').focus();
+}
+function closeModal(){ document.getElementById('overlay').classList.remove('open'); }
+document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeModal(); });
+document.getElementById('modalClose').addEventListener('click',closeModal);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+document.getElementById('tabWeek').addEventListener('click',()=>{
+  document.getElementById('tabWeek').classList.add('active'); document.getElementById('tabWeek').setAttribute('aria-selected','true');
+  document.getElementById('tabList').classList.remove('active'); document.getElementById('tabList').setAttribute('aria-selected','false');
+  document.getElementById('listView').style.display='none';
+  if(currentDayFilter){ document.getElementById('dayAgenda').style.display='flex'; }
+  else { document.getElementById('weekWrap').style.display='block'; }
+});
+document.getElementById('tabList').addEventListener('click',()=>{
+  document.getElementById('tabList').classList.add('active'); document.getElementById('tabList').setAttribute('aria-selected','true');
+  document.getElementById('tabWeek').classList.remove('active'); document.getElementById('tabWeek').setAttribute('aria-selected','false');
+  document.getElementById('weekWrap').style.display='none';
+  document.getElementById('dayAgenda').style.display='none';
+  document.getElementById('listView').style.display='flex';
+  buildList();
+});
+
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+
+document.getElementById('searchInput').addEventListener('input', e=>{
+  searchTerm = e.target.value.trim();
+  refreshCurrentView();
+});
+
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  const isDark = document.body.classList.toggle('dark');
+  document.getElementById('themeToggle').textContent = isDark ? '☀️ Light mode' : '🌙 Dark mode';
+});
+
+function updateNextBanner(){
+  const now = new Date();
+  const todayShort = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][now.getDay()];
+  const nowMin = now.getHours()*60 + now.getMinutes();
+  const textEl = document.getElementById('nextBannerText');
+  const cdEl = document.getElementById('nextBannerCountdown');
+
+  if(!DAYS.includes(todayShort)){
+    textEl.innerHTML = 'No classes today — enjoy your weekend.';
+    cdEl.textContent = '';
+    return;
+  }
+  const todaysClasses = courses.filter(c=>c.days.includes(todayShort)).sort((a,b)=>a.startMin-b.startMin);
+  const upcoming = todaysClasses.find(c=>c.startMin + c.durMin > nowMin);
+
+  if(!upcoming){
+    textEl.innerHTML = 'No more classes today.';
+    cdEl.textContent = '';
+    return;
+  }
+  if(nowMin >= upcoming.startMin){
+    textEl.innerHTML = `In progress: <b>${upcoming.code}</b> — ${upcoming.title}, ${upcoming.room}`;
+    const remain = upcoming.startMin+upcoming.durMin-nowMin;
+    cdEl.textContent = `ends in ${remain} min`;
+  } else {
+    textEl.innerHTML = `Next class: <b>${upcoming.code}</b> — ${upcoming.title}, ${upcoming.room}`;
+    const diff = upcoming.startMin - nowMin;
+    const h = Math.floor(diff/60), m = diff%60;
+    cdEl.textContent = h>0 ? `in ${h}h ${m}m` : `in ${m}m`;
+  }
+}
+
+buildGrid();
+buildList();
+buildDayChips();
+updateNextBanner();
+setInterval(updateNextBanner, 60000);
+</script>
+</body>
+</html>
